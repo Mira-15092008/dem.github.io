@@ -3,170 +3,65 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>С Новым Годом!</title>
-  <style>
-    /* ===== НОВОГОДНИЙ СТИЛЬ ===== */
-    body {
-      background: linear-gradient(135deg, #0d3b0d, #1a5c1a);
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
+    <meta nam <div class="date">21января 2026 года</div>
 
-    .snowflakes {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
+  <h1>🔐 Учебный пример шифрования RSA</h1>
 
-    .greeting {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 28px;
-      text-shadow: 0 0 10px rgba(255,255,255,0.7);
-    }
+  <h2>1. Генерация ключей</h2>
+  <p>Выбираем простые числа:</p>
+  <ul>
+    <li><code>p = 3</code></li>
+    <li><code>q = 5</code></li>
+  </ul>
+  <p>Вычисляем:</p>
+  <ul>
+    <li><code>n = p × q = 15</code></li>
+    <li><code>φ(n) = (p−1)(q−1) = 2 × 4 = 8</code></li>
+  </ul>
+  <p>Выбираем <code>e = 3</code> (взаимно простое с 8).</p>
+  <p>Находим <code>d</code>, такое что <code>(e × d) mod φ(n) = 1</code> → <code>d = 3</code>.</p>
 
-    h1, h2 {
-      color: #ffd700;
-      text-align: center;
-    }
-
-    a {
-      color: #ff6b6b;
-      text-decoration: underline;
-    }
-
-    .lights {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .light {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      animation: blink 1.5s infinite;
-    }
-
-    .light:nth-child(1) { background: red; animation-delay: 0s; }
-    .light:nth-child(2) { background: yellow; animation-delay: 0.2s; }
-    .light:nth-child(3) { background: green; animation-delay: 0.4s; }
-    .light:nth-child(4) { background: blue; animation-delay: 0.6s; }
-    .light:nth-child(5) { background: purple; animation-delay: 0.8s; }
-
-    @keyframes blink {
-      0%, 45% { opacity: 1; }
-      50%, 100% { opacity: 0.2; }
-    }
-
-    /* ===== АНИМАЦИЯ СНЕЖИНОК ===== */
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-      }
-    }
-
-    .snowflake {
-      position: absolute;
-      top: -20px;
-      color: #fff;
-      font-size: 24px;
-      user-select: none;
-      animation: fall 8s linear infinite;
-      opacity: 0.8;
-    }
-
-    .snowflake:nth-child(2n) { animation-duration: 10s; }
-    .snowflake:nth-child(3n) { animation-duration: 12s; font-size: 18px; }
-    .snowflake:nth-child(5n) { animation-duration: 7s; font-size: 30px; }
-  </style>
-</head>
-<body>
-
-  <!-- Анимированные снежинки -->
-  <div class="snowflakes" id="snowflakes"></div>
-
-  <!-- Поздравление -->
-  <div class="greeting">
-    ❄️✨ С Рождеством и Новым 2026 годом! ✨❄️
+  <div class="key">
+    <strong>Открытый ключ:</strong> <code>(n, e) = (15, 3)</code><br>
+    <strong>Закрытый ключ:</strong> <code>(n, d) = (15, 3)</code>
   </div>
 
-  <!-- Мигающие огоньки -->
-  <div class="lights">
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
-    <div class="light"></div>
+  <div class="note">
+    ⚠️ В этом примере <code>e = d</code> — это допустимо для обучения, но <strong>небезопасно</strong> в реальных системах!
   </div>
 
-  <!-- Основной контент -->
-  <!-- Скрипт для генерации снежинок -->
+  <h2>2. Шифрование</h2>
+  <p>Сообщение: <code>m = 2</code> (например, «анализ готов»)</p>
+  <p>Условия: <code>0 &lt; m &lt; n</code> и <code>НОД(m, n) = 1</code> → выполнены.</p>
+  <p>Шифруем: <code>C = m<sup>e</sup> mod n = 2<sup>3</sup> mod 15 = 8</code></p>
+  <p>→ <strong>Шифротекст: C = 8</strong></p>
+
+  <h2>3. Расшифровка</h2>
+  <p>Расшифровываем: <code>M = C<sup>d</sup> mod n = 8<sup>3</sup> mod 15 = 512 mod 15 = 2</code></p>
+  <p>→ <strong>Исходное сообщение восстановлено!</strong> ✅</p>
+
+  <button onclick="decrypt()">Проверить расшифровку (8³ mod 15)</button>
+  <div id="result"></div>
+
+  <h2>💡 А в реальности?</h2>
+    <p>
+Число <code>n</code> состоит из <strong>600+ десятичных цифр</strong> (2048+ бит).<br>
+  Такие маленькие числа (<code>p=3, q=5</code>) используются <strong>только для обучения</strong>.</p>
+
   <script>
-    const snowflakesContainer = document.getElementById('snowflakes');
-    const flakes = ['❄', '❅', '❆'];
-    for (let i = 0; i < 50; i++) {
-      const snowflake = document.createElement('div');
-      snowflake.innerHTML = flakes[Math.floor(Math.random() * flakes.length)];
-      snowflake.style.left = Math.random() * 100 + 'vw';
-      snowflake.style.animationDuration = (6 + Math.random() * 6) + 's';
-      snowflake.style.opacity = 0.3 + Math.random() * 0.7;
-      snowflake.className = 'snowflake';
-      snowflakesContainer.appendChild(snowflake);
+    function decrypt() {
+      const C = 8;
+      const d = 3;
+      const n = 15;
+      const M = (C ** d) % n;
+      document.getElementById('result').innerText = Результат: ${M};
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Pudelinka&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Pudelinka', sans-serif; }
-</style>
+
 </body>
 </html>
-<html lang-"ru">
-<head>
-  <title><Мой блог</title>
-  <link type=“text/css” rel=“stylesheet” href=“style.css” /
-</head>
-    <a href="mailto:amira.khabibulina@inbox.ru">Напишите мне</a>
-    <body>
-     <title> "Мой сайт"
-         </title>
-        <link type="text/css" rel="stylesheet" href="style.css" />
-    
-</head>
-<body>
-    
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мой светло-розовый сайт</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 20px;
-      background-color: #ffccdd; /* Светло-розовый фон */
-      font-family: Arial, sans-serif;
-      color: #333;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: #fff8f9; /* Чуть более светлый розовый для контента */
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
+e="viewport" content="width=device-width, initial-scale=1.0">
+  
 
     h1 {
       color: #d46a8a; /* Нежно-розовый заголовок */
